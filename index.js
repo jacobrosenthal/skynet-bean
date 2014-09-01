@@ -5,20 +5,34 @@ var beanAPI = require('ble-bean');
 var scan = require('./scan');
 
 
+
 function Plugin(messenger, options){
   this.messenger = messenger;
   this.options = options;
 
+
+  this.peripherals = [];
+  console.log('scan starting');
+
+  this._connect();
+
+  return this;
+}
+
+Plugin.prototype._connect = function(beanUuid){
   var self = this;
 
-  var peripherals = [];
-  scan.scan(3000, beanAPI.UUID, peripherals, function(peripherals){
+  scan(5000, beanAPI.UUID, self.peripherals, function(peripherals){
 
     peripherals.forEach(function(peripheral){
-      if(peripheral.uuid === self.options.uuid){
+      console.log('periphera found', peripheral);
+      if(peripheral.uuid === beanUuid || self.options.uuid){
         self.peripheral = peripheral;
+        console.log('matching bean', self.peripheral);
         self.peripheral.connect(function(){
+          console.log('connect bean', self.peripheral);
           self.peripheral.discoverServices([beanAPI.UUID], function(err, services){
+            console.log('services disovered', services, err);
             if (err) throw err;
             self.connectedBean = new beanAPI.Bean(services[0]);
           });
@@ -27,13 +41,6 @@ function Plugin(messenger, options){
     });
 
   });
-
-
-  return this;
-}
-
-Plugin.prototype._connect = function(){
-
 };
 
 var optionsSchema = {
@@ -53,7 +60,7 @@ var messageSchema = {
   properties: {
     setColor: {
       type: 'object',
-      required: true,
+      required: false,
       properties: {
         r: {
           type: 'int',
@@ -68,6 +75,22 @@ var messageSchema = {
           required: true
         }
       }
+    },
+    connect: {
+      type: 'object',
+      required: false,
+      properties: {
+        uuid: {
+          type: 'string',
+          required: false
+        }
+      }
+    },
+    getConnectedBean: {
+      type: 'object',
+      required: false,
+      properties: {
+      }
     }
   }
 };
@@ -78,7 +101,7 @@ function getDefaultOptions(callback){
     //do some querying of the hardware...
 
     var peripherals = [];
-    scan.scan(5000, beanAPI.UUID, peripherals, function(peripherals){
+    scan(5000, beanAPI.UUID, peripherals, function(peripherals){
 
       if(peripherals.length){
         callback(null,peripherals[0].uuid);
@@ -92,21 +115,21 @@ function getDefaultOptions(callback){
 
 Plugin.prototype.onMessage = function(message, fn){
   var data = message.payload;
-  console.log(this.options.uuid + ', ' + message.fromUuid);
+  console.log(this.options.uuid + ', from:' + message.fromUuid);
 
   if(this.connectedBean){
     if(data.setColor){
       this.connectedBean.setColor(new Buffer([data.setColor.r, data.setColor.g, data.setColor.b]));
     }
+    else if(data.getConnectedBean && fn){
+      fn(this.connectedBean);
+    }
   }
-  // var resp = {greeting: this.options.greetingPrefix + ' back atcha: ' + data.text};
 
-  // if(message.fromUuid && fn){
-  //   resp.withCallback = true;
-  //   fn(resp);
-  // }else if(message.fromUuid){
-  //   this.messenger.send({devices: message.fromUuid, payload: resp});
-  // }
+  if(data.connect){
+    this._connect(data.connect.uuid);
+  }
+
 
 };
 

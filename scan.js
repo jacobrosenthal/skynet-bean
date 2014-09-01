@@ -6,6 +6,7 @@ var noble = require('noble');
 var discover = function(peripheral){
     console.log("(scan)found:" + peripheral.advertisement.localName);
     this.peripherals.push(peripheral);
+    console.log('this.peripherals', this.peripherals);
 };
 
 var stopandreturn = function (){
@@ -16,7 +17,7 @@ var stopandreturn = function (){
     this.done(this.peripherals);
 };
 
-exports.scan = function (timeout, serviceUuid, peripherals, done) {
+module.exports = function (timeout, serviceUuid, peripherals, done) {
     noble.on('discover', discover.bind({peripherals:peripherals}));
 
     noble.startScanning([serviceUuid]);

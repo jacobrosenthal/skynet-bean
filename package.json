@@ -1,9 +1,10 @@
 {
   "name": "skynet-bean",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "Lightblue bean plugin for Skynet hub",
   "keywords": [
-    "skynet-plugin", "ble"
+    "skynet-plugin",
+    "ble"
   ],
   "repository": "",
   "main": "index.js",
@@ -13,6 +14,8 @@
   "author": "Jacob Rosenthal",
   "license": "MIT",
   "dependencies": {
-    "ble-bean": "^0.1.0"
+    "ble-bean": "^0.1.0",
+    "debug": "^1.0.4",
+    "noble": "git://github.com/octoblu/noble"
   }
 }
