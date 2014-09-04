@@ -1,12 +1,12 @@
 {
   "name": "skynet-bean",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Lightblue bean plugin for Skynet hub",
   "keywords": [
     "skynet-plugin",
     "ble"
   ],
-  "repository": "",
+  "repository": "git@github.com:jacobrosenthal/skynet-ble.git",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

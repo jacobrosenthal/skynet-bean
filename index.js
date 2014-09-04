@@ -91,6 +91,12 @@ var messageSchema = {
       required: false,
       properties: {
       }
+    },
+    getAccelerometer: {
+      type: 'object',
+      required: false,
+      properties: {
+      }
     }
   }
 };
@@ -123,6 +129,11 @@ Plugin.prototype.onMessage = function(message, fn){
     }
     else if(data.getConnectedBean && fn){
       fn(this.connectedBean);
+    }
+    else if(data.getAccelerometer && fn){
+      this.connectedBean.requestAccell(function(data){
+        fn(data);
+      });
     }
   }
 
