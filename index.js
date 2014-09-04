@@ -35,6 +35,9 @@ Plugin.prototype._connect = function(beanUuid){
             console.log('services disovered', services, err);
             if (err) throw err;
             self.connectedBean = new beanAPI.Bean(services[0]);
+            self.connectedBean.on('accell', function(x, y, z){
+              self.messenger.data({x: x, y: y, z: z});
+            });
           });
         });
       }
@@ -131,7 +134,10 @@ Plugin.prototype.onMessage = function(message, fn){
       fn(this.connectedBean);
     }
     else if(data.getAccelerometer && fn){
+      console.log('calling accel');
       this.connectedBean.requestAccell(function(data){
+
+        console.log(data);
         fn(data);
       });
     }
