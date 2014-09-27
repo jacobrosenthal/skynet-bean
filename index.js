@@ -66,15 +66,15 @@ var messageSchema = {
       required: false,
       properties: {
         r: {
-          type: 'int',
+          type: 'integer',
           required: true
         },
         g: {
-          type: 'int',
+          type: 'integer',
           required: true
         },
         b: {
-          type: 'int',
+          type: 'integer',
           required: true
         }
       }
