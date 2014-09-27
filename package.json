@@ -6,13 +6,17 @@
     "skynet-plugin",
     "ble"
   ],
-  "repository": "git@github.com:jacobrosenthal/skynet-ble.git",
+  "repository": "git@github.com:jacobrosenthal/skynet-bean.git",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jacob Rosenthal",
   "license": "MIT",
+  "homepage": "http://github.com/jacobrosenthal/skynet-bean",
+  "bugs": {
+    "url": "https://github.com/jacobrosenthal/skynet-bean/issues"
+  },
   "dependencies": {
     "ble-bean": "^0.1.0",
     "debug": "^1.0.4",
